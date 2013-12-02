@@ -1,0 +1,134 @@
+<!--
+	Author: Nitin K Singh
+-->
+<html> 
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+</head>
+<body>
+ <script type="text/javascript">
+   function Stock(year,month,price)
+   {
+    this.year=year;
+    this.month=month;
+    this.price=price;
+   }
+   Stock.stockSorter = function(stock1, stock2) {
+        return stock2.price - stock1.price;
+      };
+
+   csvReader =  new function() {
+
+	   var me = this;				// pointer to ourselves
+
+	
+	
+	/* read file - event callback from the file input box */
+	 me.readFileEvent = function (event) {
+	
+	
+		
+		
+		// the files, reader and string handler
+	        var files = event.target.files;
+
+		var reader = new FileReader();
+		var str;
+
+		// parse the file - reader is async
+                reader.onload = function(theFile) {  
+			
+			
+			 str = theFile.target.result;			// load file values 
+			 var lines = str.split("\n");	// split data by line
+                    
+                         var num2alp=['A','B','C','D','E','F','G','H','I','J','K','L','M','N'];
+                         var stockarr=new Array();
+                         stockarr[0]=new Array();
+                         stockarr[1]=new Array();
+                         stockarr[2]=new Array();
+                         stockarr[3]=new Array();
+                         stockarr[4]=new Array();
+                         stockarr[5]=new Array();
+                         stockarr[6]=new Array();
+                         stockarr[7]=new Array();
+                         stockarr[8]=new Array();
+                         stockarr[9]=new Array();
+                         stockarr[10]=new Array();
+                         stockarr[11]=new Array();
+                         stockarr[12]=new Array();
+                         stockarr[13]=new Array();
+                         var result="";
+                          
+                        
+                             for(y=0;y<14;y++)
+                                          {
+                           for(loop=1;loop<lines.length;loop++)
+				{
+                                    list=lines[loop].split(",");
+                                      
+                                      
+                                           
+                                     stockarr[y][loop-1]=new Stock(list[0],list[1],list[y+2]);
+                                           
+                  
+                                 }
+
+                                     
+					
+				      
+				}
+                                         for(z=0;z<14;z++)
+                                          {
+                                
+                                     stockarr[z].sort(Stock.stockSorter);
+                                         
+                  
+                                          } 
+                                         for(p=0;p<14;p++)
+                                          {
+                                
+                                             result=result+"<br><b>Company"+num2alp[p]+" max price history "+"</b><br>";
+                                         for(i=0;i<stockarr[p].length-1;i++)
+                                           {
+                                                if(stockarr[p][i].price==stockarr[p][0].price)
+						 { 
+                                                   
+                                                   result=result+" year="+stockarr[p][i].year+"  month="+stockarr[p][i].month+"  price="+stockarr[p][i].price+"<br>";
+						 }
+                                           }
+                  
+                                          } 
+                                  
+			
+                                document.getElementById('result').innerHTML=result;
+		
+			
+		
+		}
+		reader.onerror = function() { console.log('Error reading file');}		// error message	
+		reader.readAsText(files[0])// start reading the text, async
+	}
+
+}
+
+ // set up an event for the file <input> element
+
+
+  </script>
+
+    <input type="file" id="files" name="files" />
+    <div id="result"></div>
+  <script type="text/javascript">
+    if(document.attachEvent)
+    {
+     document.getElementById('files').attachEvent('onchange',csvReader.readFileEvent);
+    }
+   if(document.addEventListener)
+    {
+     document.getElementById('files').addEventListener('change', csvReader.readFileEvent, false);
+    }
+  </script>
+
+</body>
+</html>
